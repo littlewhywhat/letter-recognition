@@ -9,6 +9,9 @@ X = appendToRightColumn(X, 0);
 X = appendToLowRow(X, 0);
 % create check
 check = X(1:dim, 1:dim);
+check = removeLowRow(check);
+check = removeRightColumn(check);
+
 % unenroll to 46x26*20*46 (one big row of letters)
 X = resh(X, dim);
 % cut low row
@@ -26,9 +29,7 @@ X = reshape(X(:), dim * dim, size(X,1)/dim * size(X,2)/dim)';
 
 %check
 tmp = reshape(X(1, :), dim, dim);
-tmp = appendToRightColumn(tmp, 0);
-tmp = appendToLowRow(tmp, 0);
 tmp = tmp == check;
-fprintf('Next output should be equal to: %d \n', (dim + 1) * (dim + 1));
+fprintf('Next output should be equal to: %d \n', dim  * dim );
 sum(sum(tmp))
 end

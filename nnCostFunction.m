@@ -62,43 +62,56 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+
+% conver
 y_bin = zeros(size(y, 1), num_labels);
 for i = 1:length(y)
     y_bin(i, y(i)) = 1;
 end
 
 
-a1 = [ones(size(X, 1), 1), X]; % 5000 x 401
-z2 = a1 * Theta1'; %5000 x 25
-a2 = sigmoid(z2); %5000 x 25
-a2 = [ones(size(a2, 1), 1), a2]; %5000 x 26
+a1 = [ones(size(X, 1), 1), X]; % add ones 5000 x 401
+z2 = a1 * Theta1'; % 5000 x 25
+a2 = sigmoid(z2); % 5000 x 25
+
+a2 = [ones(size(a2, 1), 1), a2]; % add ones 5000 x 26
 z3 = a2 * Theta2';
+
 hx = sigmoid(z3);
+
 sumk = sum((-y_bin) .* log(hx) - (1 - y_bin) .* log(1 - hx), 2);
+
 J = (1/m) * sum( ... 5000 x 1
                    sumk
                );
 
+% compute tmp theta that have zeros instead of ones
 tmp_Theta1 = Theta1;
 tmp_Theta1(:, 1) = zeros(size(Theta1, 1), 1);
+
 tmp_Theta2 = Theta2;
 tmp_Theta2(:, 1) = zeros(size(Theta2, 1), 1);
 
+% compute regulirization term
 reg = (lambda/(2*m)) * (sum(sum(tmp_Theta1 .^ 2, 2)) + sum(sum(tmp_Theta2 .^ 2, 2)));
+
 J = J + reg;
 
+% compute error for output layer
 err3 = (hx - y_bin); % 5000 x 10
+
+% compute error for hidden layer
 err2 = (err3 * Theta2);
+% remove errors for ones
 err2 = err2(:, 2:end); %5000 x 25
 err2 = err2 .* sigmoidGradient(z2); % 5000 x 25 
 
 Theta2_grad = (1/m) * (err3' * a2); % 10x26 
+
 Theta1_grad = (1/m) * (err2' * a1); % 25 * 401
 
 Theta2_grad = Theta2_grad + (lambda/m)*(tmp_Theta2);
 Theta1_grad = Theta1_grad + (lambda/m)*(tmp_Theta1);
-
-
 
 % -------------------------------------------------------------
 
@@ -106,6 +119,5 @@ Theta1_grad = Theta1_grad + (lambda/m)*(tmp_Theta1);
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
