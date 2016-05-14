@@ -32,7 +32,7 @@ num_labels = 10;          % 10 labels, from 1 to 10
 % Load Training Data
 fprintf('Loading and Visualizing Data ...\n')
 
-load('ex4data1.mat');
+load('ex4data.mat');
 m = size(X, 1);
 
 % Randomly select 100 data points to display
@@ -74,8 +74,8 @@ fprintf('\nFeedforward Using Neural Network ...\n')
 % Weight regularization parameter (we set this to 0 here).
 lambda = 0;
 
-J = nnCostFunction(nn_params, input_layer_size, hidden_layer_size, ...
-                   num_labels, X, y, lambda);
+J = nnCostFunction(nn_params, [input_layer_size, hidden_layer_size, ...
+                   num_labels], X, y, lambda);
 
 fprintf(['Cost at parameters (loaded from ex4weights): %f '...
          '\n(this value should be about 0.287629)\n'], J);
@@ -93,8 +93,8 @@ fprintf('\nChecking Cost Function (w/ Regularization) ... \n')
 % Weight regularization parameter (we set this to 1 here).
 lambda = 1;
 
-J = nnCostFunction(nn_params, input_layer_size, hidden_layer_size, ...
-                   num_labels, X, y, lambda);
+J = nnCostFunction(nn_params, [input_layer_size, hidden_layer_size, ...
+                   num_labels], X, y, lambda);
 
 fprintf(['Cost at parameters (loaded from ex4weights): %f '...
          '\n(this value should be about 0.383770)\n'], J);
@@ -162,8 +162,8 @@ lambda = 3;
 checkNNGradients(lambda);
 
 % Also output the costFunction debugging values
-debug_J  = nnCostFunction(nn_params, input_layer_size, ...
-                          hidden_layer_size, num_labels, X, y, lambda);
+debug_J  = nnCostFunction(nn_params, [input_layer_size, ...
+                          hidden_layer_size, num_labels], X, y, lambda);
 
 fprintf(['\n\nCost at (fixed) debugging parameters (w/ lambda = 10): %f ' ...
          '\n(this value should be about 0.576051)\n\n'], debug_J);
@@ -190,9 +190,9 @@ lambda = 1;
 
 % Create "short hand" for the cost function to be minimized
 costFunction = @(p) nnCostFunction(p, ...
-                                   input_layer_size, ...
+                                   [input_layer_size, ...
                                    hidden_layer_size, ...
-                                   num_labels, X, y, lambda);
+                                   num_labels], X, y, lambda);
 
 % Now, costFunction is a function that takes in only one argument (the
 % neural network parameters)

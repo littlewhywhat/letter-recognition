@@ -67,7 +67,6 @@ for i = 1:(nargin - 3)
   argstr = [argstr, ',P', int2str(i)];
 end
 argstr = [argstr, ')'];
-
 if max(size(length)) == 2, red=length(2); length=length(1); else red=1; end
 S=['Iteration '];
 
