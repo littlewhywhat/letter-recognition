@@ -2,34 +2,24 @@ function X = loadLetters(filename, dim)
 %{
     Loading and processing test and train data.
 %}
-% load test_set.bmp into X 1195x919 (26*45+25 X 20*45+19)
+% load test_set.bmp into X 
 X = imread(filename);
-% append zeros to right and bottom (26*46 x 20*46)
-X = appendToRightColumn(X, 0);
-X = appendToLowRow(X, 0);
 % create check
-check = X(1:dim, 1:dim);
-check = removeLowRow(check);
-check = removeRightColumn(check);
-
-% unenroll to 46x26*20*46 (one big row of letters)
-X = resh(X, dim);
-% cut low row
-X = removeLowRow(X);
-% reshape to 26*20*46x46 (one big column of letters)
-X = resh2(X, dim);
-% cut right column
-X = removeRightColumn(X);
-% now we are in 45
-dim = dim - 1;
+check = X((1:dim), (1:dim));
+% append zeros to right and bottom
+X = [X, zeros(size(X, 1), 1)];
+X = [X; zeros(1, size(X, 2))];
+% unenroll to one big row of letters
+X = placeInHorizBlocks(X, dim + 1);
+X(end, :) = [];
+% reshape to one big column of letters
+X = placeInVertBlocks(X, dim + 1);
+X(:, end) = [];
 % reshape to one big row again
-X = resh(X, dim);
-% reshape to the desired form for neural network 26*20x45*45
+X = placeInHorizBlocks(X, dim);
+% reshape to the desired form for neural network 
 X = reshape(X(:), dim * dim, size(X,1)/dim * size(X,2)/dim)';
-
-%check
-tmp = reshape(X(1, :), dim, dim);
-tmp = tmp == check;
+% perform quick check
 fprintf('Next output should be equal to: %d \n', dim  * dim );
-sum(sum(tmp))
+sum(sum(reshape(X(1, :), dim, dim) == check))
 end

@@ -1,4 +1,4 @@
-function [part1, part2] = divideByRow(set, ratio1, ratio2, num_labels) 
+function [part1, part2] = divideData(set, ratio1, ratio2, num_labels) 
     
     label_block_size = size(set, 1) / num_labels;
     label_fract_size = label_block_size / (ratio1 + ratio2);

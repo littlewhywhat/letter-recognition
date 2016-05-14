@@ -1,5 +1,4 @@
 function processData(inputfile, outputfile, num_labels, dim) 
-%load test_data
 
 X = loadLetters(inputfile, dim); 
 
