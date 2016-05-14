@@ -1,15 +1,7 @@
 function [J grad] = nnCostFunction3(nn_params, ...
                                    nn_structure,
-                                   %input_layer_size, ...
-                                   %hidden_layer_size,
-                                   %hidden_layer_size_2, ...
-                                   %num_labels, ...
                                    X, y, lambda)
 
-% Reshape nn_params back into the parameter
-% Theta1 and Theta2, the weight matrices
-% for our 2 layer neural network
-%nn_structure = [input_layer_size, hidden_layer_size, hidden_layer_size_2, num_labels];
 % Setup some useful variables
 m = size(X, 1);
          
