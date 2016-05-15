@@ -40,16 +40,7 @@ end
 hx = layer_i;
 
 % compute cost function
-sumk = sum((-y_bin) .* log(hx) - (1 - y_bin) .* log(1 - hx), 2);
-
-J = (1/m) * sum( ... 5000 x 1
-                   sumk
-               );
-
-% compute regulirization term
-reg = (lambda/(2*m)) * reg;
-
-J = J + reg;
+J = (1/m) * sum(sum((-y_bin) .* log(hx) - (1 - y_bin) .* log(1 - hx), 2)) + (lambda/(2*m)) * reg;
 
 % perform backpropogation of errors and compute gradient
 
@@ -60,7 +51,7 @@ nn_structure = fliplr(nn_structure);
 
 end_i = numel(nn_params);
 start_l = nn_structure(1) * m;
-for i = 2:length(nn_structure) - 1,
+for i = 2:length(nn_structure),
     % selection indices
     start_i = end_i - (nn_structure(i) + 1) * nn_structure(i-1);
     end_l = start_l + nn_structure(i) * m;
@@ -69,36 +60,30 @@ for i = 2:length(nn_structure) - 1,
                    nn_structure(i-1), nn_structure(i) + 1);
     layer_i = reshape(layers(start_l + 1:end_l),
                    m, nn_structure(i));
+    % compute sigmoid
+    sigmoid_layer_i = layer_i;
+    % for last layer (input) we don't need to apply sigmoid
+    if (i != length(nn_structure))
+        sigmoid_layer_i = sigmoid(layer_i);
+    endif
     % compute gradient
-    Thetai_grad = (1/m) * (erri' * [ones(size(layer_i, 1), 1), sigmoid(layer_i)]);
+    Thetai_grad = (1/m) * (erri' * [ones(size(layer_i, 1), 1), sigmoid_layer_i]);
     tmp_Thetai = Thetai;
     tmp_Thetai(:,1) = zeros(size(tmp_Thetai, 1), 1);
     Thetai_grad = Thetai_grad + (lambda/m) * (tmp_Thetai);
     
     grad = [Thetai_grad(:); grad];
-    
-    % compute error for next layer
-    erri = (erri * Thetai);
-    erri = erri(:, 2:end);
-    erri = erri .* sigmoidGradient(layer_i);
-    
-    % selection indices
-    end_i = end_i - (end_i - start_i);
-    start_l = start_l + (end_l - start_l);
+    % compute error for next layer if it's not the last one
+    if (i != length(nn_structure)) 
+        erri = (erri * Thetai);
+        erri = erri(:, 2:end);
+        erri = erri .* sigmoidGradient(layer_i);
+        
+        % selection indices
+        end_i = end_i - (end_i - start_i);
+        start_l = start_l + (end_l - start_l);
+    endif
 end
-
-i = length(nn_structure);
-start_i = end_i - (nn_structure(i) + 1) * nn_structure(i-1);
-Thetai = reshape(nn_params(start_i + 1 : end_i), 
-                 nn_structure(i-1), nn_structure(i) + 1);
-
-Thetai_grad = (1/m) * (erri' * [ones(size(X, 1), 1), X]);
-tmp_Thetai = Thetai;
-tmp_Thetai(:,1) = zeros(size(tmp_Thetai, 1), 1);
-Thetai_grad = Thetai_grad + (lambda/m) * (tmp_Thetai);
-
-grad = [Thetai_grad(:); grad];
-% -------------------------------------------------------------
 
 % =========================================================================
 
