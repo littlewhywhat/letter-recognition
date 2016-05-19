@@ -19,9 +19,19 @@ W = zeros(L_out, 1 + L_in);
 % Note: The first row of W corresponds to the parameters for the bias units
 %
 
-epsilon_init = 0.12;
+epsilon_init = sqrt(6)/sqrt(L_in + L_out);
 W = rand(L_out, 1 + L_in) * 2 * epsilon_init -  epsilon_init;
 
+%{
+for i = 1:size(W,1),
+    for j = i + 1:size(W,1),
+        if (sum(W(i,:) == W(j,:)) == size(W,2))
+            fprintf('random\n');
+            W(j,randperm(size(W,2))) = W(j,:);
+        endif
+    end
+end
+%}
 % =========================================================================
 
 end

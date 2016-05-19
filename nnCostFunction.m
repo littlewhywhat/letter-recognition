@@ -37,9 +37,12 @@ for i = 2:length(nn_structure),
   reg = reg + sum(sum(Thetai .^ 2, 2));
 end
 
+% use last computation as our hypothesis
+
 hx = layer_i;
 
-% compute cost function
+% compute cost function for logistic regression with regularization term
+
 J = (1/m) * sum(sum((-y_bin) .* log(hx) - (1 - y_bin) .* log(1 - hx), 2)) + (lambda/(2*m)) * reg;
 
 % perform backpropogation of errors and compute gradient
