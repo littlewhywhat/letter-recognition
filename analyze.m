@@ -79,7 +79,7 @@ function analyze(data_file, nn_structure, ratios)
     title(sprintf('Learning Curve (lambda = %f)', lambda));
     xlabel('Number of training examples')
     ylabel('Error')
-    axis([0 700 0 4])
+    axis([num_of_examples_axis(1) max(num_of_examples_axis) 0 max([error_train; error_val]) + 0.5])
     legend('Train set', 'Test set')
 
     fprintf('Program paused. Press enter to continue.\n');
