@@ -14,7 +14,7 @@ nn_structure = [input_layer_size, hidden_layer_size, num_labels];
 % Load Training Data
 fprintf('Loading and Visualizing Data ...\n')
 
-load('data/ex4data.mat');
+load('data/data_20x20_10x500.mat');
 m = size(X, 1);
 
 % Randomly select 100 data points to display
@@ -32,7 +32,7 @@ pause;
 fprintf('\nLoading Saved Neural Network Parameters ...\n')
 
 % Load the weights into variables Theta1 and Theta2
-load('data/ex4weights.mat');
+load('data/checkweights.mat');
 
 % Unroll parameters 
 nn_params = [Theta1(:) ; Theta2(:)];

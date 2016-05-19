@@ -3,4 +3,5 @@
 !*.m
 !.gitignore
 !data/
-
+!data/data_20x20_10x500.mat
+!data/data_20x20_26x74.mat

@@ -1,3 +1,3 @@
 function analyzeDigits() 
-    analyze('data/ex4data.mat', [25], 1, [33,33,34]);
+    analyze('data/data_20x20_10x500.mat', [25], [33,33,34]);
 end
